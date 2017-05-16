@@ -1,0 +1,17 @@
+---
+- hosts: webserver_2
+  tasks:
+    - name: Add node repository
+      become: yes
+      yum_repository:
+        name: node
+        description: nodejs
+        baseurl: https://rpm.nodesource.com/pub_7.x/el/6/x86_64/
+        gpgcheck: no
+    - name: Install
+      become: yes
+      yum:
+        name: nodejs-7.10.0
+        state: latest
+      tags:
+        - install
