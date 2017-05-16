@@ -1,5 +1,7 @@
 ---
-- hosts: webserver
+- hosts: all
+  vars_files:
+    - config.yml
   tasks:
     - name: Add node repository
       become: yes
@@ -8,12 +10,17 @@
         description: nodejs
         baseurl: https://rpm.nodesource.com/pub_7.x/el/6/x86_64/
         gpgcheck: no
+
+- hosts: webservers
+  vars_files:
+    - config.yml
+  tasks:
     - name: Install
       become: yes
       yum: name={{item}} state=latest
       with_items:
         - nginx
-        - nodejs-7.9.0
+        - "nodejs-{{node_version_webservers_1}}"
       tags:
         - install
 
@@ -29,19 +36,15 @@
         state: restarted
         enabled: yes
 
-- hosts: webserver_2
+
+- hosts: webservers_2
+  vars_files:
+    - config.yml
   tasks:
-    - name: Add node repository
-      become: yes
-      yum_repository:
-        name: node
-        description: nodejs
-        baseurl: https://rpm.nodesource.com/pub_7.x/el/6/x86_64/
-        gpgcheck: no
     - name: Install
       become: yes
       yum:
-        name: nodejs-7.10.0
+        name: "nodejs-{{node_version_webservers_2}}"
         state: latest
       tags:
         - install
