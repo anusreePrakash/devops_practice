@@ -3,8 +3,7 @@
   tasks:
     - name : debug
       debug:
-        # msg:  "{{nginx_config_state}}"
-        var: nginx_config_state
+        var: nginx_config_changes
 
   vars_files:
     - configs/webserver1.yml
